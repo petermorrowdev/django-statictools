@@ -9,12 +9,15 @@ from statictools.tags import generate_script_tag, generate_css_tags_for_entry
 from statictools.urls import generate_dev_url
 
 
-def generate_vite_asset_url(path: str) -> str:
+def generate_vite_asset_url(path: str) -> str | None:
     if get_settings().enable_hmr:
         return generate_dev_url(path)
     
     manifest = get_manifest()
-    return urljoin(settings.STATIC_URL, manifest[path]["file"])
+    if path in manifest:
+        return urljoin(settings.STATIC_URL, manifest[path]["file"])
+    else:
+        return None
 
 
 def generate_vite_asset(path: str, **attrs: Dict[str, str]) -> str:

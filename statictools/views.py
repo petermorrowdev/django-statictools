@@ -15,6 +15,9 @@ def vite_static_redirect(request, path, insecure=False):
         response = serve(request, path, insecure)
     except Http404:
         vite_dev_url = generate_vite_asset_url(path)
-        return redirect(vite_dev_url, permanent=False)
+        if vite_dev_url is not None:
+            return redirect(vite_dev_url, permanent=False)
+        else:
+            raise Http404
     else:
         return response
