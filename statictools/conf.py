@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from django.conf import settings as django_settings
 
@@ -27,10 +28,24 @@ class StatictoolsSettings:
     @property
     def client_lib(self) -> str:
         return '@vite/client'
+    
+    @property
+    def hmr_endpoint(self) -> str:
+        return f'{self.hmr_proto}://{self.hmr_host}:{self.hmr_port}/'
 
 
 default_settings = StatictoolsSettings()
 
 
-def get_settings():
-    return getattr(django_settings, "STATICTOOLS_SETTINGS", default_settings)
+def get_settings() -> StatictoolsSettings:
+    s: dict[str, Any] | None = getattr(django_settings, "STATICTOOLS", None)
+    if s is not None:
+        return StatictoolsSettings(
+            assets_path=Path(s.get('assets_path', default_settings.assets_path)),
+            enable_hmr=bool(s.get('enable_hmr', default_settings.enable_hmr)),
+            hmr_proto=str(s.get('hmr_proto', default_settings.hmr_proto)),
+            hmr_host=str(s.get('hmr_host', default_settings.hmr_host)),
+            hmr_port=int(s.get('hmr_port', default_settings.hmr_port)),
+        )
+    else:
+        return default_settings

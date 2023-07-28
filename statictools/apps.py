@@ -1,7 +1,6 @@
 import logging
 
 from django.apps import AppConfig
-from django.conf import settings
 
 from statictools.conf import get_settings
 from statictools.manifest import StaticManifest
@@ -15,6 +14,7 @@ class StatictoolsConfig(AppConfig):
     verbose_name = "Static Tools"
     
     def ready(self):
-        logger.info(f"Starting statictools {get_settings()}")
+        statictools_settings = get_settings()
+        logger.info(f"Redirecting assets to HMR {statictools_settings.hmr_endpoint}")
         if not get_settings().enable_hmr:
             StaticManifest.load()
