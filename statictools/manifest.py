@@ -1,7 +1,5 @@
-import os
 import json
 import logging
-from contextvars import ContextVar
 from typing import Dict, Any
 
 from statictools.conf import get_settings
@@ -12,11 +10,11 @@ logger = logging.getLogger(__name__)
 
 class StaticManifest:
     _manifest_data: Dict[str, Any] | None = None
-    
+
     @classmethod
     def load(cls):
         cls._manifest_data = read_manifest()
-    
+
     @classmethod
     def get(cls):
         if cls._manifest_data is not None:
@@ -32,7 +30,7 @@ def read_manifest():
         with open(s.manifest_path) as f:
             return json.load(f)
     except FileNotFoundError:
-        RuntimeError(f'manifest.json not found in "{s.manifest_path}"')
+        raise RuntimeError(f'manifest.json not found in "{s.manifest_path}"')
 
 
 def get_manifest() -> dict:
