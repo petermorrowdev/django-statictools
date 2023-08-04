@@ -21,7 +21,11 @@ def generate_css_tags_for_entry(
 
     if "imports" in manifest_entry:
         for import_path in manifest_entry["imports"]:
-            tags.extend(generate_css_tags_for_entry(urljoin(settings.STATIC_URL, import_path), already_processed))
+            tags.extend(
+                generate_css_tags_for_entry(
+                    urljoin(settings.STATIC_URL, import_path), already_processed
+                )
+            )
 
     if "css" in manifest_entry:
         for css_path in manifest_entry["css"]:

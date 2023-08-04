@@ -12,7 +12,7 @@ from statictools.urls import generate_dev_url
 def generate_vite_asset_url(path: str) -> str | None:
     if get_settings().enable_hmr:
         return generate_dev_url(path)
-    
+
     manifest = get_manifest()
     if path in manifest:
         return urljoin(settings.STATIC_URL, manifest[path]["file"])

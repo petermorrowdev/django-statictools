@@ -24,11 +24,11 @@ class StatictoolsSettings:
     @property
     def manifest_path(self) -> Path:
         return self.static_root / 'manifest.json'
-    
+
     @property
     def client_lib(self) -> str:
         return '@vite/client'
-    
+
     @property
     def hmr_endpoint(self) -> str:
         return f'{self.hmr_proto}://{self.hmr_host}:{self.hmr_port}/'
