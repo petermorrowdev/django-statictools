@@ -26,7 +26,13 @@ def generate_vite_asset(path: str, **attrs: Dict[str, str]) -> str:
     else:
         tags = []
         manifest = get_manifest()
-        manifest_entry = manifest[path]
+        try:
+            manifest_entry = manifest[path]
+        except KeyError:
+            raise RuntimeError(
+                f"Path: {path} not found in manifest. Check that it's defined in your"
+                " vite.config.ts"
+            )
         scripts_attrs = {"type": "module", **attrs}
 
         tags.extend(generate_css_tags_for_entry(manifest_entry, []))
